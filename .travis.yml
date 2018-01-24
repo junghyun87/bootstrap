@@ -2,9 +2,10 @@ language: node_js
 git:
   depth: 10
 node_js:
-  - "0.10"
+  - "6.4"
 before_install:
   - travis_retry sudo pip install -r test-infra/requirements.txt
+  - rvm install "ruby-1.9.3-p551"
   - rvm use 1.9.3 --fuzzy
   - export GEMDIR=$(rvm gemdir)
   - if [ "$TWBS_TEST" = validate-html ]; then echo "ruby=$(basename $GEMDIR) jekyll=$JEKYLL_VERSION rouge=$ROUGE_VERSION" > pseudo_Gemfile.lock; fi
@@ -13,25 +14,13 @@ before_install:
   - echo "$TRAVIS_COMMIT_MSG" | grep '\[skip sauce\]'; export TWBS_DO_SAUCE=$?; true
 install:
   - npm install -g grunt-cli
-  - ./test-infra/s3_cache.py download npm-modules
-  - if [ "$TWBS_TEST" = validate-html ] && [ $TWBS_DO_VALIDATOR -ne 0 ]; then ./test-infra/s3_cache.py download rubygems; fi
-after_script:
-  - if [ "$TWBS_TEST" = core ]; then ./test-infra/s3_cache.py upload npm-modules; fi
-  - if [ "$TWBS_TEST" = validate-html ] && [ $TWBS_DO_VALIDATOR -ne 0 ]; then ./test-infra/s3_cache.py upload rubygems; fi
 env:
   global:
     - JEKYLL_VERSION: 2.4.0
     - ROUGE_VERSION: 1.7.2
-    - SAUCE_USERNAME: bootstrap
-    - secure: "pJkBwnuae9dKU5tEcCqccfS1QQw7/meEcfz63fM7ba7QJNjoA6BaXj08L5Z3Vb5vBmVPwBawxo5Hp0jC0r/Z/O0hGnAmz/Cz09L+cy7dSAZ9x4hvZePSja/UAusaB5ogMoO8l2b773MzgQeSmrLbExr9BWLeqEfjC2hFgdgHLaQ="
-    - secure: "gqjqISbxBJK6byFbsmr1AyP1qoWH+rap06A2gI7v72+Tn2PU2nYkIMUkCvhZw6K889jv+LhQ/ybcBxDOXHpNCExCnSgB4dcnmYp+9oeNZb37jSP0rQ+Ib4OTLjzc3/FawE/fUq5kukZTC7porzc/k0qJNLAZRx3YLALmK1GIdUY="
-    - secure: "Gghh/e3Gsbj1+4RR9Lh2aR/xJl35HWiHqlPIeSUqE9D7uDCVTAwNce/dGL3Ew7uJPfJ6Pgr70wD3zgu3stw0Zmzayax0hiDtGwcQCxVIER08wqGANK9C2Q7PYJkNTNtiTo6ehKWbdV4Z+/U+TEYyQfpQTDbAFYk/vVpsdjp0Lmc="
-    - secure: "RTbRdx4G/2OTLfrZtP1VbRljxEmd6A1F3GqXboeQTldsnAlwpsES65es5CE3ub/rmixLApOY9ot7OPmNixFgC2Y8xOsV7lNCC62QVpmqQEDyGFFQKb3yO6/dmwQxdsCqGfzf9Np6Wh5V22QFvr50ZLKLd7Uhd9oXMDIk/z1MJ3o="
+    - SAUCE_USERNAME: jhkwon
+    - secure: "tRNEW97LGivsQ0VOTPdWLxkkNY5FrIyDcY4EmhoAAWO0m03xCZnlB9dK+nk7vIg8DeAX6ieqe8+z68+soIhHjw30yBAC2aox6jPlHVC1zHUoIerb1DFjDxyAKJEQyqCiyGp8CMUg0Bl2clscvZ8YHrhSODQU+hip1+QpycNyvMho5cTwEzn4C5VwHoA4fhgfaIc02iNXGeVxTZTWc7A0za5LzruXYPcu7t+d/J7p3BASsJUCxTCD0AYjXM9w/S+2LKf0TjhxpLLCn9ICy3BthynVkNaHjjOM2C8y+ht40JPklEbwXv/AVrLzYvWTWYFEu4hwF4Xs0oPAfR3NaB1OKPv9VRPccWRE6me6faUFxwHl9JgQkMl8Z6bzwbSi8KQ8h4opdEe/txHl069BuRtXZnrdpb/Ps/H5o4CmCt1DVSrbSBe86gbp6WBdbC+xy5o9PiH5iRLIFxesj8HIgbJgH/dSlTCHMh+eMTRFM/H3czRGAr3hrMzBFfYks5Dp0pv4bKLDlE/HgFLzfLKSPPVIpBQJNutdAvj29WyVs7cfsXDKSBNWytW7+D1WHv/4No6XbXRFBLFsBvHEncqNOOMVvxkWxHkGMdYc6salcXLzEf2nEaeNs8VmLP9QVTe0WvXVdHkvkt/bQLuH3BCaBzjN5FJIUgoZKrv1OXqbmZoO0j8="
   matrix:
-    - TWBS_TEST=core
-    - TWBS_TEST=validate-html
     - TWBS_TEST=sauce-js-unit
 matrix:
   fast_finish: true
-notifications:
-  slack: heybb:iz4wwosL0N0EdaX1gvgkU0NH
