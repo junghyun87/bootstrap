@@ -14,6 +14,7 @@ before_install:
   - echo "$TRAVIS_COMMIT_MSG" | grep '\[skip sauce\]'; export TWBS_DO_SAUCE=$?; true
 install:
   - npm install -g grunt-cli
+  - npm i
 env:
   global:
     - JEKYLL_VERSION: 2.4.0
