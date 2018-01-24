@@ -7,6 +7,7 @@
   },
   {
     browserName: "chrome",
+    version: "35",
     platform: "OS X 10.9"
   },
   {
