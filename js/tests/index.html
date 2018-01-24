@@ -23,33 +23,34 @@
     </style>
     <script>
       // See https://github.com/axemclion/grunt-saucelabs#test-result-details-with-qunit
-      var log = []
-      QUnit.done(function (testResults) {
-        var tests = []
-        for (var i = 0, len = log.length; i < len; i++) {
-          var details = log[i]
+      var log = [];
+      var testName;
+
+      QUnit.done(function (test_results) {
+        var tests = [];
+        for(var i = 0, len = log.length; i < len; i++) {
+          var details = log[i];
           tests.push({
             name: details.name,
             result: details.result,
             expected: details.expected,
             actual: details.actual,
             source: details.source
-          })
+          });
         }
-        testResults.tests = tests
+        test_results.tests = tests;
 
-        window.global_test_results = testResults
-      })
+        window.global_test_results = test_results;
+      });
 
-      QUnit.testStart(function (testDetails) {
-        $(window).scrollTop(0)
-        QUnit.log = function (details) {
+      QUnit.testStart(function(testDetails){
+        QUnit.log(function(details){
           if (!details.result) {
-            details.name = testDetails.name
-            log.push(details)
+            details.name = testDetails.name;
+            log.push(details);
           }
-        }
-      })
+        });
+      });
 
       // Cleanup
       QUnit.testDone(function () {
