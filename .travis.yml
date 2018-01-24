@@ -2,7 +2,7 @@ language: node_js
 git:
   depth: 10
 node_js:
-  - "0.10"
+  - "6.4"
 before_install:
   - travis_retry sudo pip install -r test-infra/requirements.txt
   - rvm install "ruby-1.9.3-p551"
@@ -14,7 +14,7 @@ before_install:
   - echo "$TRAVIS_COMMIT_MSG" | grep '\[skip sauce\]'; export TWBS_DO_SAUCE=$?; true
   - if [ "$TRAVIS_REPO_SLUG" = twbs-savage/bootstrap ]; then export TWBS_DO_VALIDATOR=0; fi
 install:
-  - npm install grunt-cli
+  - npm install -g grunt-cli
   - npm i
 env:
   global:
