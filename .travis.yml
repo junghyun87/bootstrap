@@ -5,6 +5,7 @@ node_js:
   - "0.10"
 before_install:
   - travis_retry sudo pip install -r test-infra/requirements.txt
+  - rvm install "ruby-1.9.3-p551"
   - rvm use 1.9.3 --fuzzy
   - export GEMDIR=$(rvm gemdir)
   - if [ "$TWBS_TEST" = validate-html ]; then echo "ruby=$(basename $GEMDIR) jekyll=$JEKYLL_VERSION rouge=$ROUGE_VERSION" > pseudo_Gemfile.lock; fi
